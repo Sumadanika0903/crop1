@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cloud-based Crop Disease Detection</title>
+  <style>
+    /* Global Styles */
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      margin: 0; 
+      background: #f0f2f5; 
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Navigation Bar */
+    .navbar {
+      background-color: #2c3e50;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar h1 {
+      color: #fff;
+      margin: 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .nav-links button {
+      background: transparent;
+      border: 1px solid transparent;
+      color: #ecf0f1;
+      padding: 8px 16px;
+      margin-left: 10px;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links button:hover, .nav-links button.active {
+      background: #34495e;
+      border-color: #3498db;
+      color: #3498db;
+    }
+
+    /* Container & Sections */
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .section {
+      display: none; /* Hidden by default, toggled via JS */
+      animation: fadeIn 0.5s;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Home Section Styles */
+    .hero-text {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .hero-text h2 {
+      color: #2c3e50;
+      font-size: 2rem;
+      margin-bottom: 15px;
+    }
+
+    .hero-text p {
+      color: #555;
+      max-width: 800px;
+      margin: 0 auto;
+      font-size: 1.1rem;
+    }
+
+    /* Your Specific Upload Card Styles (Enhanced slightly) */
+    .card { 
+      background: #fff; 
+      padding: 40px; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+      max-width: 600px; 
+      margin: auto; 
+      text-align: center;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #2c3e50;
+    }
+
+    .upload-area {
+      border: 2px dashed #bdc3c7;
+      border-radius: 8px;
+      padding: 30px;
+      margin: 20px 0;
+      background: #f9f9f9;
+      transition: border-color 0.3s;
+    }
+
+    .upload-area:hover {
+      border-color: #3498db;
+    }
+
+    input[type=file] { 
+      margin: 12px 0; 
+    }
+
+    .btn { 
+      padding: 12px 24px; 
+      border: none; 
+      background: #007bff; 
+      color: #fff; 
+      border-radius: 6px; 
+      cursor: pointer; 
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background: #0056b3;
+    }
+
+    /* Dataset Section Styles */
+    .dataset-header {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    .dataset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+    }
+
+    .disease-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+
+    .disease-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .disease-img-placeholder {
+      width: 100%;
+      height: 180px;
+      background-color: #e9ecef;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #7f8c8d;
+      font-size: 3rem;
+    }
+    
+    /* Specific Colors for Placeholders to simulate images */
+    .img-apple { background: #d4edda; color: #155724; }
+    .img-tomato { background: #f8d7da; color: #721c24; }
+    .img-potato { background: #fff3cd; color: #856404; }
+    .img-corn { background: #fff3cd; color: #e0a800; }
+
+    .disease-info {
+      padding: 20px;
+    }
+
+    .disease-info h3 {
+      margin-top: 0;
+      color: #2c3e50;
+      border-bottom: 2px solid #f0f2f5;
+      padding-bottom: 10px;
+    }
+
+    .disease-detail-label {
+      font-weight: bold;
+      color: #555;
+      display: block;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .prevention-list {
+      padding-left: 20px;
+      margin: 5px 0;
+      color: #666;
+      font-size: 0.95rem;
+    }
+    
+    .prevention-list li {
+      margin-bottom: 4px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      margin-top: 50px;
+      color: #7f8c8d;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <h1>Crop Disease Prediction</h1>
+    <div class="nav-links">
+      <button onclick="showSection('home')" class="active" id="btn-home">Home & Detection</button>
+      <button onclick="showSection('dataset')" id="btn-dataset">About Dataset</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- HOME SECTION -->
+    <div id="home" class="section active">
+      <div class="hero-text">
+        <h2><center>Cloud-based Crop Disease Detection and Yield Prediction using Deep Learning</center></h2>
+        <p>
+          This platform utilizes advanced Convolutional Neural Networks (CNNs) hosted on cloud infrastructure to provide real-time agricultural analysis. 
+          By leveraging Deep Learning algorithms trained on thousands of plant images, we can identify early signs of crop stress and disease with high accuracy, 
+          enabling farmers to take proactive measures and secure their yields.
+        </p>
+      </div>
+
+      <!-- User's Requested Upload Code (styled slightly for wrapper) -->
+      <div class="card">
+        <h2>Plant Disease Detection</h2>
+        <p>Upload a leaf image and the model will detect the disease.</p>
+        
+        <!-- Note: The action is kept as requested, but onsubmit prevents reload for this demo -->
+        <!-- index.html: replace this form block (remove onsubmit handler) -->
+<form method="post" action="{{ url_for('upload') }}" enctype="multipart/form-data">
+  <div class="upload-area">
+    <input type="file" name="file" accept="image/*" required>
+  </div>
+  <button class="btn" type="submit">Upload & Detect</button>
+</form>
+
+<!-- Remove the handleUpload JS (the demo alert). You may keep the tab-switching JS below. -->
+
+      </div>
+    </div>
+
+    <!-- DATASET SECTION -->
+    <div id="dataset" class="section">
+      <div class="dataset-header">
+        <h2>About the PlantVillage Dataset</h2>
+        <p>
+          The models used in this application are trained on the <strong>PlantVillage Dataset</strong>, an open-access repository containing over <strong>54,306 images</strong>. 
+          It covers <strong>38 class labels</strong> spanning <strong>14 crop species</strong>, including healthy and diseased leaves. 
+          Below are details on common diseases found in the dataset and their prevention steps.
+        </p>
+      </div>
+
+      <div class="dataset-grid">
+        
+        <!-- Card 1: Tomato Early Blight -->
+        <div class="disease-card">
+          <div class="disease-img-placeholder img-tomato">🍅</div>
+          <div class="disease-info">
+            <h3>Tomato: Early Blight</h3>
+            <span class="disease-detail-label">Symptoms:</span>
+            <p>Dark, concentric rings ("bullseye" pattern) on lower leaves; yellowing foliage that drops off.</p>
+            
+            <span class="disease-detail-label">Prevention Steps:</span>
+            <ul class="prevention-list">
+              <li>Practice crop rotation (every 2-3 years).</li>
+              <li>Stake plants to improve air circulation.</li>
+              <li>Water at the base to keep leaves dry.</li>
+              <li>Mulch soil to prevent spore splash.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Card 2: Potato Late Blight -->
+        <div class="disease-card">
+          <div class="disease-img-placeholder img-potato">🥔</div>
+          <div class="disease-info">
+            <h3>Potato: Late Blight</h3>
+            <span class="disease-detail-label">Symptoms:</span>
+            <p>Large, dark water-soaked spots on leaves; white fungal growth on undersides during humidity.</p>
+            
+            <span class="disease-detail-label">Prevention Steps:</span>
+            <ul class="prevention-list">
+              <li>Use certified disease-free seed potatoes.</li>
+              <li>Eliminate cull piles (discarded potatoes).</li>
+              <li>Apply fungicides preventatively if forecast predicts blight.</li>
+              <li>Destroy infected vines before harvest.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Card 3: Apple Scab -->
+        <div class="disease-card">
+          <div class="disease-img-placeholder img-apple">🍎</div>
+          <div class="disease-info">
+            <h3>Apple: Scab</h3>
+            <span class="disease-detail-label">Symptoms:</span>
+            <p>Olive-green, velvety spots on leaves; deformed or cracked fruit with scabby lesions.</p>
+            
+            <span class="disease-detail-label">Prevention Steps:</span>
+            <ul class="prevention-list">
+              <li>Rake and destroy fallen leaves in autumn.</li>
+              <li>Prune trees to open the canopy for sunlight.</li>
+              <li>Plant resistant varieties (e.g., Honeycrisp).</li>
+              <li>Apply fungicides during the growing season.</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Card 4: Corn Common Rust -->
+        <div class="disease-card">
+          <div class="disease-img-placeholder img-corn">🌽</div>
+          <div class="disease-info">
+            <h3>Corn: Common Rust</h3>
+            <span class="disease-detail-label">Symptoms:</span>
+            <p>Oval to elongate cinnamon-brown pustules on both upper and lower leaf surfaces.</p>
+            
+            <span class="disease-detail-label">Prevention Steps:</span>
+            <ul class="prevention-list">
+              <li>Select resistant corn hybrids.</li>
+              <li>Plant early to avoid late-season infection.</li>
+              <li>Monitor fields regularly for early pustules.</li>
+              <li>Fungicide application in severe cases.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    &copy; SumaDanika Panchumarthi
+  </footer>
+
+  <script>
+    // Simple Tab Switching Logic
+    function showSection(sectionId) {
+      // Hide all sections
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(sec => sec.classList.remove('active'));
+
+      // Remove active class from all nav buttons
+      const buttons = document.querySelectorAll('.nav-links button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      // Show target section
+      document.getElementById(sectionId).classList.add('active');
+
+      // Highlight target button
+      document.getElementById('btn-' + sectionId).classList.add('active');
+    }
+
+    // Mock Upload Handler (since there is no backend in this static file)
+    function handleUpload(event) {
+      event.preventDefault(); // Stop the actual form submission
+      const btn = document.querySelector('.btn');
+      const originalText = btn.innerText;
+      
+      // Simulate processing
+      btn.innerText = "Analyzing...";
+      btn.style.backgroundColor = "#f39c12";
+      
+      setTimeout(() => {
+        alert("Analysis Complete! (This is a demo frontend. Connect a Flask/Django backend to process the image.)");
+        btn.innerText = originalText;
+        btn.style.backgroundColor = "#007bff";
+      }, 2000);
+    }
+  </script>
+</body>
+</html>

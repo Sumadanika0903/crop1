@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Result - Plant Disease Detection</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; background:#f7f7f7; }
+    .card { background: #fff; padding: 20px; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); max-width:900px; margin:auto; }
+    .images { display:flex; gap:20px; align-items:center; }
+    .images img { max-width:420px; border-radius:6px; border:1px solid #ddd; }
+    .meta { margin-top:12px; }
+    .btn { padding:8px 16px; border:none; background:#007bff; color:#fff; border-radius:4px; cursor:pointer; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Detection Result</h2>
+    <div class="images">
+      <div>
+        <h4>Original</h4>
+        <img src="{{ orig_img }}" alt="original">
+      </div>
+      <div>
+        <h4>Detected</h4>
+        <img src="{{ result_img }}" alt="result">
+      </div>
+    </div>
+    <div class="meta">
+      <p><strong>Detected disease:</strong> {{ label }}</p>
+      <p><strong>Confidence:</strong> {{ confidence }}</p>
+      <a class="btn" href="{{ url_for('index') }}">Back</a>
+    </div>
+  </div>
+</body>
+</html>
